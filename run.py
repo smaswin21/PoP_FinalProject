@@ -8,6 +8,7 @@ from labyrinth import Labyrinth
 # with the same rarity. If you get 3 legendaries, automatically end the run you have won.
 # Chests will only have epic or legendary items
 
+# Below is only test code for now
 if __name__ == "__main__":
     test = Labyrinth(5)
     labyrinth = test.createLabyrinth()

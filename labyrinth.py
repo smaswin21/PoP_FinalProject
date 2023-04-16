@@ -96,17 +96,6 @@ class Labyrinth:
             room = Room("Room" + str(i), [100, 100], items, chests, traps)
             rooms.append(room)
 
-            #################
-            ###debug code####
-            #################
-
-            #for room in rooms:
-                #print(room.getName(), " with item: ", room.getChests()[0].getItem().getName())
-
-            #################
-            ###/debug code###
-            #################
-
         return rooms
 
     # Create full labyrinth with n rooms
