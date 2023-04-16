@@ -43,7 +43,6 @@ class Character:
     def getHealth(self) -> int:
         return self.health
     
-    # TODO change return value to Item array
     def getInventory(self):
         return self.inventory
     
