@@ -2,6 +2,8 @@
 # This file contains the character class of the playable character
 # in game
 
+from item import Item
+
 class Character:
     def __init__(self, name, health, inventory, score):
         self.name = name
@@ -20,6 +22,7 @@ class Character:
             if (direction == "down"): self.position[1] -= 1
         except:
             print("Invalid move try again")
+            
 
     # Add item to inventory
     def addItem(self, item):
@@ -28,6 +31,10 @@ class Character:
     # Remove item from inventory
     def removeItem(self, item):
         self.inventory.remove(item)
+
+    # Remove damage for player health bar
+    def removeHealth(self, num):
+        self.getHealth -= num
 
     # Getter methods
     def getName(self) -> str:
