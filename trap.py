@@ -6,6 +6,7 @@ class Trap:
     def __init__(self, size, damage) -> None:
         self.size = size
         self.damage = damage
+        self.position = [0, 0]
 
     # Getter methods
     def getSize(self):
@@ -14,9 +15,15 @@ class Trap:
     def getDamage(self) -> int:
         return self.damage
     
+    def getPosition(self):
+        return self.position
+    
      # Setter methods
     def setSize(self, size):
         self.size = size
 
     def setDamage(self, damage):
         self.damage = damage
+        
+    def setPosition(self, position):
+        self.position = position

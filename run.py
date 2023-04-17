@@ -1,4 +1,4 @@
-from labyrinth import Labyrinth
+from entities import Entities
 
 # Goal of game: Go through labyrinth with 5 rooms and try to pick up many items as possible.
 # Each item will have a rarity, each rarity will correspond to a number of points. There are
@@ -10,8 +10,8 @@ from labyrinth import Labyrinth
 
 # Below is only test code for now
 if __name__ == "__main__":
-    test = Labyrinth(5)
-    labyrinth = test.createLabyrinth()
+    entities = Entities(5)
+    labyrinth = entities.createLabyrinth()
     print("/////////////////////////")
     print("Your labyrinth generation")
     print("/////////////////////////")
@@ -19,6 +19,7 @@ if __name__ == "__main__":
     for room in labyrinth:
         print("-----------------------")
         print("-> ", room.getName())
+        print("Room dimensions: ", room.getDimensions())
         print("-----------------------")
         print("-----------------------")
         print("Items")
@@ -27,6 +28,7 @@ if __name__ == "__main__":
         for item in room.getItems():
             print("Name: ", item.getName())
             print("Rarity: ", item.getRarity())
+            print("Position in room: ", item.getPosition())
             
         print("-----------------------")
         print("Chests")
@@ -35,6 +37,7 @@ if __name__ == "__main__":
         for chest in room.getChests():
             print("Item in chest: ", chest.getItem().getName())
             print("Rarity in chest: ", chest.getItem().getRarity())
+            print("Position in room: ", chest.getPosition())
             
         print("-----------------------")
         print("Traps")
@@ -42,9 +45,8 @@ if __name__ == "__main__":
         
         for trap in room.getTraps():
             print("Trap here at: ", trap.getSize())
+            print("Position in room: ", chest.getPosition())
 
     print("/////////////////////////")
     print("Done labyrinth generation")
     print("/////////////////////////")
-    
-    print(test.getRoomCount())

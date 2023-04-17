@@ -8,7 +8,7 @@ from trap import Trap
 from room import Room
 from item import Item
 
-class Labyrinth:
+class Entities:
     def __init__(self, roomcount: int):
         self.roomcount = roomcount
 
@@ -97,12 +97,30 @@ class Labyrinth:
             rooms.append(room)
 
         return rooms
+    
+    # Place all chosen type of entity on the boundries of each room
+    def placeEntityType(self, entities, room: Room):
+        for entity in entities:
+            boundaries = room.getDimensions()
+            position_new = [random.randint(0, boundaries[0]), random.randint(0, boundaries[0])]
+            entity.setPosition(position_new)
+        
+    # Places all entities randomly in boundaries of the room
+    def placeAllEntities(self, rooms):
+        for room in rooms:
+            items = room.getItems()
+            chests = room.getChests()
+            traps = room.getTraps()
+            self.placeEntityType(items, room)
+            self.placeEntityType(chests, room)
+            self.placeEntityType(traps, room)
 
     # Create full labyrinth with n rooms
     def createLabyrinth(self):
-        labyrinth = self.createRooms(self.getRoomCount(), maxChests=3, maxTraps=3, maxItems=4)
+        rooms = self.createRooms(self.getRoomCount(), maxChests=3, maxTraps=3, maxItems=4)
+        self.placeAllEntities(rooms)
 
-        return labyrinth
+        return rooms
     
     # Getter methods
     def getRoomCount(self) -> int:

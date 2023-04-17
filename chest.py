@@ -7,6 +7,7 @@ class Chest:
     def __init__(self, name, item):
         self.name = name
         self.item = item
+        self.position = [0, 0]
 
     # Getter methods
     def getName(self) -> str:
@@ -14,6 +15,9 @@ class Chest:
 
     def getItem(self) -> Item:
         return self.item
+
+    def getPosition(self):
+        return self.position
     
      # Setter methods
     def setName(self, name):
@@ -21,6 +25,9 @@ class Chest:
 
     def setItem(self, item):
         self.item = item
+        
+    def setPosition(self, position):
+        self.position = position
     
 
     
