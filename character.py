@@ -10,7 +10,7 @@ class Character:
         self.health = health
         self.inventory = inventory
         self.score = score
-        self.position = [0, 0]
+        self.position = [49, 49]
 
     # Function that can move player in position array either right, left
     # up, down

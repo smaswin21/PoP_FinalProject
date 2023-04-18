@@ -1,4 +1,6 @@
 from entities import Entities
+from game import Game
+from character import Character
 
 # Goal of game: Go through labyrinth with 5 rooms and try to pick up many items as possible.
 # Each item will have a rarity, each rarity will correspond to a number of points. There are
@@ -8,18 +10,36 @@ from entities import Entities
 # with the same rarity. If you get 3 legendaries, automatically end the run you have won.
 # Chests will only have epic or legendary items
 
+def enterRoom(character, room):
+        while character.getPosition() != room.getExit():
+            print("Exit is at: ", room.getExit())
+            print("You are at position: ", character.getPosition())
+            prompt = input("Where would you like to move?   (right, left, up, down)")
+            
+            character.move(prompt.lower())
+        
+        character.setPosition([0, 0])
+        print("")
+        print("************************************")
+        print("Congrats you are onto the next room!")
+        print("************************************")
+        print("")
+
 # Below is only test code for now
 if __name__ == "__main__":
     entities = Entities(5)
     labyrinth = entities.createLabyrinth()
+    character = Character("Bob", 3, None, 0)
+    
     print("/////////////////////////")
-    print("Your labyrinth generation")
+    print("Start of Game")
     print("/////////////////////////")
 
     for room in labyrinth:
         print("-----------------------")
         print("-> ", room.getName())
         print("Room dimensions: ", room.getDimensions())
+        print("Exit Position: ", room.getExit())
         print("-----------------------")
         print("-----------------------")
         print("Items")
@@ -46,7 +66,13 @@ if __name__ == "__main__":
         for trap in room.getTraps():
             print("Trap here at: ", trap.getSize())
             print("Position in room: ", chest.getPosition())
+            
+        print("-----------------------")
+        print("You")
+        print("-----------------------")
+        
+        enterRoom(character, room)
 
     print("/////////////////////////")
-    print("Done labyrinth generation")
+    print("End of Game")
     print("/////////////////////////")
