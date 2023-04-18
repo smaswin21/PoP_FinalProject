@@ -93,7 +93,7 @@ class Entities:
                 items.append(item[random.randint(0, len(item)-1)])
 
             # Creating Room object with all entities
-            dimensions = [100, 100]
+            dimensions = [20, 20]
             exit = [int(dimensions[0]/2), int(dimensions[1]/2)]
             room = Room("Room" + str(i), dimensions, items, chests, traps, exit)
             rooms.append(room)

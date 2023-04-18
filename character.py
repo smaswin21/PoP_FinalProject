@@ -5,12 +5,12 @@
 from item import Item
 
 class Character:
-    def __init__(self, name, health, inventory, score):
+    def __init__(self, name, health, inventory, score, position):
         self.name = name
         self.health = health
         self.inventory = inventory
         self.score = score
-        self.position = [49, 49]
+        self.position = position
 
     # Function that can move player in position array either right, left
     # up, down
@@ -34,7 +34,7 @@ class Character:
 
     # Remove damage for player health bar
     def removeHealth(self, num):
-        self.getHealth -= num
+        self.setHealth(self.getHealth() - num)
 
     # Getter methods
     def getName(self) -> str:
