@@ -14,16 +14,44 @@ class Character:
 
     # Function that can move player in position array either right, left
     # up, down
-    def move(self, direction: str):
+    def move(self, direction: str, size: int):
         try:
-            if (direction == "right"): self.position[0] += 1
-            if (direction == "left"): self.position[0] -= 1
-            if (direction == "up"): self.position[1] += 1
-            if (direction == "down"): self.position[1] -= 1
+            if (direction == "right"): self.position[0] += size
+            if (direction == "left"): self.position[0] -= size
+            if (direction == "up"): self.position[1] += size
+            if (direction == "down"): self.position[1] -= size
         except:
             print("Invalid move try again")
+    
+    # The puzzle of the game, returns true if the character has 3 legendary
+    # items       
+    def checkEasterEgg(self) -> bool:
+        inventory = self.getInventory()
+        legendaries = []
+        for item in inventory:
+            if len(legendaries) == 3: return True
+            if item.getRarity() == "Legendary":
+                legendaries.append(item)
+        
+        return False
+    
+    # Checks to see if chosen item exits in character inventory
+    def findItemInInventory(self, chosen: str) -> Item:
+        inventory = self.getInventory()
+        for item in inventory:
+            if chosen.lower() == item.getName().lower():
+                return item
+        
+        raise ValueError("Item does not exist")
+    
+    # Looks through all rarity values of items in inventory and adjusts score
+    def changeScore(self):
+        inventory = self.inventory
+        score = 0
+        for item in inventory:
+            score += item.rarityPoints()
+        self.setScore(score)
             
-
     # Add item to inventory
     def addItem(self, item):
         self.inventory.append(item)

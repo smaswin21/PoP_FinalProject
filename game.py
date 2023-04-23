@@ -5,6 +5,10 @@
 # TODO: This class is not done might reuse to organise my method in run better
 from entities import Entities
 from character import Character
+from chest import Chest
+from item import Item
+from trap import Trap
+from room import Room
 
 class Game:
     def __init__(self, rooms, character: Character) -> None:

@@ -7,10 +7,19 @@ from chest import Chest
 from trap import Trap
 from room import Room
 from item import Item
+from character import Character
 
+# Raised when the rarity does not match in game
+class RarityMatch(Exception):
+    pass
+    
 class Entities:
-    def __init__(self, roomcount: int):
+    def __init__(self, roomcount: int, common_items=None, rare_items=None, epic_items=None, legendary_items=None):
         self.roomcount = roomcount
+        self.common_items = common_items
+        self.rare_items = rare_items
+        self.epic_items = epic_items
+        self.legendary_items = legendary_items
 
     # Creating all the items in the game
     def defineItems(self):
@@ -32,9 +41,44 @@ class Entities:
         rare_items = [silver, iron, copper]
         epic_items =[amulet, medalion, trophy]
         legendary_items = [wand, emerald, pandora]
-
+        
+        # Setting the items to the entities object
+        self.setCommonItems(common_items)
+        self.setRareItems(rare_items)
+        self.setEpicItems(epic_items)
+        self.setLegendaryItems(legendary_items)
+        
         return common_items, rare_items, epic_items, legendary_items
 
+    # Fuses 2 items in inventory, removes the 2 chosen items and chooses a random one in next rarity
+    def fuseItems(self, item1: Item, item2: Item, character: Character):
+        fuse_item = None
+        character_score = character.getScore()
+        if item1.getRarity() == "Common" and item2.getRarity() == "Common":
+            character.removeItem(item1)
+            character.removeItem(item2)
+            items = self.getRareItems()
+            fuse_item = items[random.randint(0, len(items)-1)]
+            character.addItem(fuse_item)
+        elif item1.getRarity() == "Rare" and item2.getRarity() == "Rarity":
+            character.removeItem(item1)
+            character.removeItem(item2)
+            items = self.getEpicItems()
+            fuse_item = items[random.randint(0, len(items)-1)]
+            character.addItem(fuse_item)
+        elif item1.getRarity() == "Epic" and item2.getRarity() == "Epic":
+            character.removeItem(item1)
+            character.removeItem(item2)
+            items = self.getLegendaryItems()
+            fuse_item = items[random.randint(0, len(items)-1)]
+            character.addItem(fuse_item)
+        else:
+            raise RarityMatch("The Rarities do not match")
+
+        # Changing score after fusion
+        character.changeScore()
+        return fuse_item
+        
     # Method to create a chest with random chance to have epic or legendary
     def createChest(self, epic, legendary) -> Chest:
         choices = [epic, legendary]
@@ -127,9 +171,33 @@ class Entities:
     # Getter methods
     def getRoomCount(self) -> int:
         return self.roomcount
+
+    def getCommonItems(self):
+        return self.common_items
+    
+    def getRareItems(self):
+        return self.rare_items
+    
+    def getEpicItems(self):
+        return self.epic_items
+    
+    def getLegendaryItems(self):
+        return self.legendary_items
     
     # Setter methods
     def setRoomCount(self, roomcount):
         self.roomcount = roomcount
+    
+    def setCommonItems(self, common_items):
+        self.common_items = common_items
+    
+    def setRareItems(self, rare_items):
+        self.rare_items = rare_items
+        
+    def setEpicItems(self, epic_items):
+        self.epic_items = epic_items
+        
+    def setLegendaryItems(self, legendary_items):
+        self.legendary_items = legendary_items
     
 

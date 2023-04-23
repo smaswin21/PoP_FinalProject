@@ -14,8 +14,8 @@ class Item:
         rarity_points = {
             "Common": 10,
             "Rare": 30,
-            "Epic": 50,
-            "Legendary": 100
+            "Epic": 70,
+            "Legendary": 150
         }
         return rarity_points[self.rarity]
 

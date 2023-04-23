@@ -16,21 +16,50 @@ from room import Room
 
 # TODO: Put all of these functions into new class called Game
 
+# Prints out stats about what is in the room
+def printEntitiesInRoom():
+    print("-----------------------")
+    print("-----------------------")
+    print("Items")
+    print("-----------------------")
+    for item in room.getItems():
+            print("Name: ", item.getName())
+            print("Rarity: ", item.getRarity())
+            print("Position in room: ", item.getPosition())
+            
+    print("-----------------------")
+    print("Chests")
+    print("-----------------------")
+    for chest in room.getChests():
+        try:
+            print("Item in chest: ", chest.getItem().getName())
+            print("Rarity in chest: ", chest.getItem().getRarity())
+            print("Position in room: ", chest.getPosition())
+        except:
+            print("Already opened chest")
+        
+    print("-----------------------")
+    print("Traps")
+    print("-----------------------")
+    for trap in room.getTraps():
+        print("Trap here at: ", trap.getSize())
+        print("Position in room: ", trap.getPosition())
+
 # Prompt for interacting with chest entity
 def foundChest(character: Character, chest: Chest):
     while True:
         print("")
         print("!!!")
-        prompt = input("You have found a chest would you like to open it? (y/n)")
+        prompt = input("You have found a chest would you like to open it? (y/n): ")
         print("")
+        item = chest.getItem()
         
         if prompt.lower() == "y":
-            if chest.getItem() != None:
-                character.addItem(chest.getItem())
+            if item != None:
+                character.addItem(item)
                 
                 # Updating score with new item
-                score = character.getScore()
-                character.setScore(score + item.rarityPoints())  
+                character.changeScore()
                 
                 print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
                 print("You just picked up: ", chest.getItem().getName(), " (", chest.getItem().getName(), ")")
@@ -60,8 +89,7 @@ def foundItem(character: Character, item: Item):
             character.addItem(item)
             
             # Updating score with new item
-            score = character.getScore()
-            character.setScore(score + item.rarityPoints())  
+            character.changeScore()
             
             print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             print("You just picked up: ", item.getName())
@@ -110,20 +138,20 @@ def findEntity(character: Character, entity_mapping):
 def mapEntities(entities):
     entity_mapping = {}
     for entity in entities:
-        print(type(entity).__name__, " at ", entity.getPosition())
+        #print(type(entity).__name__, " at ", entity.getPosition())
         entity_mapping[entity] = entity.getPosition()
     
     return entity_mapping
+
 # Main logic for all actions that will happen when a character is inside a room
-def enterRoom(character: Character, room: Room):
+def enterRoom(character: Character, room: Room, entities: Entities):
     # Mapping all entities with their respective location
     chest_mapping = mapEntities(room.getChests())
     trap_mapping = mapEntities(room.getTraps())
     item_mapping = mapEntities(room.getItems())
     
+    # Character can do whatever they want until it meets the exit
     while character.getPosition() != room.getExit():
-        print("Exit is at: ", room.getExit())
-        print("You are at position: ", character.getPosition())
         
         # Checking to see if character has encountered an entity in the game
         findEntity(character, chest_mapping)
@@ -134,25 +162,50 @@ def enterRoom(character: Character, room: Room):
         inventory = character.getInventory()
         health = character.getHealth()
         score = character.getScore()
-        try:
-            print("Inventory: ")
-            for item in inventory:
-                print(item.getName(), end=" | ")
-        except:
-            print("Inventory: None")
         print("\nHealth: ", health)
         print("Score: ", score)
+        print("Exit is at: ", room.getExit())
+        print("You are at position: ", character.getPosition())
+        print("------------------------------------")
         
-        # Prompting user to move character in the room
-        prompt = input("Where would you like to move?   (right, left, up, down)")
-        character.move(prompt.lower())
-        
-    character.setPosition([0, 0])
-    print("")
-    print("************************************")
-    print("Congrats you are onto the next room!")
-    print("************************************")
-    print("")
+        # Prompting user for action they want to take
+        print("Press m to move")
+        print("Press i to show inventory")
+        print("Press f to fuse items")
+        print("Press s to show items in room")
+        choice = input("Enter either m or i or f or s: ")
+        print("")
+        if choice == "m":
+            # Prompting user to move character in the room
+            prompt = input("Where would you like to move?   (right, left, up, down): ")
+            steps = int(input("How many steps?: "))
+            character.move(prompt.lower(), steps)
+        elif choice == "i":
+            # Displays user inventory in game
+            try:
+                print("Inventory: ")
+                for item in inventory: print(f"{item.getName()} ({item.getRarity()})")
+            except:
+                print("Inventory: None")
+        elif choice == "f":
+            # Displays prompt to fuse 2 items with same rarity in game
+            item1_str = input("Enter first item name: ")
+            item2_str = input("Enter second item name: ")
+            
+            # Checking to see if item exits in user inventory
+            try:
+                item1 = character.findItemInInventory(item1_str)
+                item2 = character.findItemInInventory(item2_str)
+                fused = entities.fuseItems(item1, item2, character)
+                print("\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+                print(f"{fused.getName()} was created!")
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            except Exception as e:
+                print(str(e))
+        elif choice == "s":
+            printEntitiesInRoom()
+        else:
+            print("Invalid choice.")
 
 # Below is only test code for now
 if __name__ == "__main__":
@@ -165,49 +218,31 @@ if __name__ == "__main__":
     print("/////////////////////////")
 
     for room in labyrinth:
-        print("-----------------------")
-        print("-> ", room.getName())
-        print("Room dimensions: ", room.getDimensions())
-        print("Exit Position: ", room.getExit())
-        print("-----------------------")
-        print("-----------------------")
-        print("Items")
-        print("-----------------------")
+        # If character has fused 3 legendary items and made item "Golden egg"
+        # Immediately end the game completely
+        if character.checkEasterEgg() == True:
+            break
         
-        for item in room.getItems():
-            print("Name: ", item.getName())
-            print("Rarity: ", item.getRarity())
-            print("Position in room: ", item.getPosition())
-            
-        print("-----------------------")
-        print("Chests")
-        print("-----------------------")
+        enterRoom(character, room, entities)
         
-        for chest in room.getChests():
-            print("Item in chest: ", chest.getItem().getName())
-            print("Rarity in chest: ", chest.getItem().getRarity())
-            print("Position in room: ", chest.getPosition())
-            
-        print("-----------------------")
-        print("Traps")
-        print("-----------------------")
-        
-        for trap in room.getTraps():
-            print("Trap here at: ", trap.getSize())
-            print("Position in room: ", trap.getPosition())
-            
-        print("-----------------------")
-        print("You")
-        print("-----------------------")
-        
-        enterRoom(character, room)
+        # Reseting character position for the next room
+        character.setPosition([0, 0])
+        print("")
+        print("************************************")
+        print("Congrats you are onto the next room!")
+        print("************************************")
+        print("")
     
+    # Finished the Labyrinth and scores will be displayed
     print("")
     print("**************************************************")
     print("Congrats! you have made it throught the labyrinth.")
     print("**************************************************")
     print("")
     print("Your final score was: ", character.getScore())
+    
+    #Display message that you did easter egg
+    if character.checkEasterEgg() == True: print("The Golden Egg was what you always wanted!")  
 
     print("/////////////////////////")
     print("End of Game")
