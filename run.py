@@ -14,6 +14,12 @@ from room import Room
 # with the same rarity. If you get 3 legendaries, automatically end the run you have won.
 # Chests will only have epic or legendary items
 
+# Define constants for the screen width and height
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+ROOM_WIDTH = 400
+ROOM_HEIGHT = 400
+
 # TODO: Put all of these functions into new class called Game
 
 # Prints out stats about what is in the room
@@ -209,7 +215,7 @@ def enterRoom(character: Character, room: Room, entities: Entities):
 
 # Below is only test code for now
 if __name__ == "__main__":
-    entities = Entities(5)
+    entities = Entities(5, ROOM_WIDTH, ROOM_HEIGHT)
     labyrinth = entities.createLabyrinth()
     character = Character("Bob", 3, [], 0, [0, 0])
     

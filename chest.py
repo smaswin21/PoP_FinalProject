@@ -4,10 +4,13 @@
 from item import Item
 
 class Chest:
-    def __init__(self, name, item):
+    def __init__(self, name, item, width, height, x_coordinate=None, y_coordinate=None):
         self.name = name
         self.item = item
-        self.position = [0, 0]
+        self.width = width
+        self.height = height
+        self.x_coordinate = x_coordinate
+        self.y_coordinate = y_coordinate
 
     # Getter methods
     def getName(self) -> str:
@@ -15,9 +18,18 @@ class Chest:
 
     def getItem(self) -> Item:
         return self.item
-
-    def getPosition(self):
-        return self.position
+    
+    def getX_Coordinate(self) -> int:
+        return self.x_coordinate
+    
+    def getY_Coordinate(self) -> int:
+        return self.y_coordinate
+    
+    def getWidth(self) -> int:
+        return self.width
+    
+    def getHeight(self) -> int:
+        return self.height
     
      # Setter methods
     def setName(self, name):
@@ -25,9 +37,18 @@ class Chest:
 
     def setItem(self, item):
         self.item = item
+    
+    def setX_Coordinate(self, x_coordinate):
+        self.x_coordinate = x_coordinate
         
-    def setPosition(self, position):
-        self.position = position
+    def setY_Coordinate(self, y_coordinate):
+        self.y_coordinate = y_coordinate
+        
+    def setWidth(self, width):
+        self.width = width
+    
+    def setHeight(self, height):
+        self.height = height
     
 
     

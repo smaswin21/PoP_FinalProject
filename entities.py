@@ -13,13 +13,17 @@ from character import Character
 class RarityMatch(Exception):
     pass
     
+# Had =None on each parameter
 class Entities:
-    def __init__(self, roomcount: int, common_items=None, rare_items=None, epic_items=None, legendary_items=None):
+    def __init__(self, roomcount: int, ROOM_WIDTH, ROOM_HEIGHT, common_items=None, rare_items=None, 
+                 epic_items=None, legendary_items=None):
         self.roomcount = roomcount
         self.common_items = common_items
         self.rare_items = rare_items
         self.epic_items = epic_items
         self.legendary_items = legendary_items
+        self.ROOM_WIDTH = ROOM_WIDTH
+        self.ROOM_HEIGHT = ROOM_HEIGHT
 
     # Creating all the items in the game
     def defineItems(self):
@@ -53,7 +57,7 @@ class Entities:
     # Fuses 2 items in inventory, removes the 2 chosen items and chooses a random one in next rarity
     def fuseItems(self, item1: Item, item2: Item, character: Character):
         fuse_item = None
-        character_score = character.getScore()
+        
         if item1.getRarity() == "Common" and item2.getRarity() == "Common":
             character.removeItem(item1)
             character.removeItem(item2)
@@ -89,7 +93,7 @@ class Entities:
         # one item randomly with equal weighted probability
         items = rarity[0]
         item = items[random.randint(0, len(items)-1)]
-        chest = Chest("chest", item)   
+        chest = Chest("chest", item, 50, 50)   
 
         return chest
     
@@ -98,15 +102,14 @@ class Entities:
         # Default trap size will only be width and length 2 - 4
         w = random.choice([2, 4])
         l = random.choice([2, 4])
-        size = [w, l]
 
         # Default damage for trap is 1 health for the character
-        trap = Trap(size, 1)
+        trap = Trap(1, w, l)
 
         return trap
     
     # Method to create n rooms in the labyrinth
-    def createRooms(self, n, maxChests, maxTraps, maxItems):
+    def createRooms(self, n, ROOM_WIDTH, ROOM_HEIGHT, maxChests, maxTraps, maxItems):
         # Invoking all the items in the game
         common_items, rare_items, epic_items, legendary_items = self.defineItems()
         all_items = [common_items, rare_items, epic_items, legendary_items]
@@ -137,9 +140,9 @@ class Entities:
                 items.append(item[random.randint(0, len(item)-1)])
 
             # Creating Room object with all entities
-            dimensions = [20, 20]
-            exit = [int(dimensions[0]/2), int(dimensions[1]/2)]
-            room = Room("Room" + str(i), dimensions, items, chests, traps, exit)
+            exit_x = int(ROOM_WIDTH/2)
+            exit_y = int(ROOM_HEIGHT/2)
+            room = Room("Room" + str(i), items, chests, traps, exit_x, exit_y, ROOM_WIDTH, ROOM_HEIGHT)
             rooms.append(room)
 
         return rooms
@@ -147,9 +150,12 @@ class Entities:
     # Place all chosen type of entity on the boundries of each room
     def placeEntityType(self, entities, room: Room):
         for entity in entities:
-            boundaries = room.getDimensions()
-            position_new = [random.randint(0, boundaries[0]), random.randint(0, boundaries[0])]
-            entity.setPosition(position_new)
+            boundary_x = room.getWidth()
+            boundary_y = room.getHeight()
+            position_new_x = random.randint(0, boundary_x)
+            position_new_y = random.randint(0, boundary_y)
+            entity.setX_Coordinate(position_new_x)
+            entity.setY_Coordinate(position_new_y)
         
     # Places all entities randomly in boundaries of the room
     def placeAllEntities(self, rooms):
@@ -162,8 +168,8 @@ class Entities:
             self.placeEntityType(traps, room)
 
     # Create full labyrinth with n rooms
-    def createLabyrinth(self):
-        rooms = self.createRooms(self.getRoomCount(), maxChests=3, maxTraps=3, maxItems=4)
+    def createLabyrinth(self, ROOM_WIDTH, ROOM_HEIGHT):
+        rooms = self.createRooms(self.getRoomCount(), ROOM_WIDTH, ROOM_HEIGHT, maxChests=3, maxTraps=3, maxItems=4)
         self.placeAllEntities(rooms)
 
         return rooms

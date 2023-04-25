@@ -3,20 +3,20 @@
 # in the labyrinth
 
 class Room:
-    def __init__(self, name, dimensions, items, chests, traps, exit):
+    def __init__(self, name, items, chests, traps, exit_x, exit_y, width, height):
         self.name = name
-        self.dimensions = dimensions
         self.items = items
         self.chests = chests
         self.traps = traps
-        self.exit = exit      # TODO Change this later so that it's more cleaner
+        self.exit_x = exit_x
+        self.exit_y = exit_y
+        self.width = width
+        self.height = height
+        
 
     # Getter methods
     def getName(self):
         return self.name
-
-    def getDimensions(self):
-        return self.dimensions
 
     def getItems(self):
         return self.items
@@ -27,15 +27,21 @@ class Room:
     def getTraps(self):
         return self.traps
     
-    def getExit(self):
-        return self.exit
+    def getWidth(self) -> int:
+        return self.width
+    
+    def getHeight(self) -> int:
+        return self.height
+    
+    def getExit_X(self):
+        return self.exit_x
+    
+    def getExit_Y(self):
+        return self.exit_Y
     
     # Setter methods
     def setName(self, name):
         self.name = name
-
-    def setDimensions(self, dimensions):
-        self.dimensions = dimensions
 
     def setItems(self, items):
         self.items = items
@@ -45,6 +51,15 @@ class Room:
     
     def setScore(self, traps):
         self.traps = traps
+    
+    def setWidth(self, width):
+        self.width = width
+    
+    def setHeight(self, height):
+        self.height = height
         
-    def setExit(self, exit):
-        self.exit = exit
+    def setExit_X(self, exit_x):
+        self.exit_x = exit_x
+        
+    def setExit_Y(self, exit_y):
+        self.exit_y = exit_y

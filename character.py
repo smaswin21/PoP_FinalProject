@@ -3,25 +3,44 @@
 # in game
 
 from item import Item
+import pygame
 
 class Character:
-    def __init__(self, name, health, inventory, score, position):
+    def __init__(self, name, health, inventory, score, x_coordinate, 
+                 y_coordinate, width, height):
         self.name = name
         self.health = health
         self.inventory = inventory
         self.score = score
-        self.position = position
+        self.x_coordinate = x_coordinate
+        self.y_coordinate = y_coordinate
+        self.width = width
+        self.height = height
 
-    # Function that can move player in position array either right, left
-    # up, down
-    def move(self, direction: str, size: int):
-        try:
-            if (direction == "right"): self.position[0] += size
-            if (direction == "left"): self.position[0] -= size
-            if (direction == "up"): self.position[1] += size
-            if (direction == "down"): self.position[1] -= size
-        except:
-            print("Invalid move try again")
+    # Update character's position based on elapsed time
+    def update(self, keys_pressed, SCREEN_WIDTH, SCREEN_HEIGHT):
+        if keys_pressed[pygame.K_UP]:
+            self.y_coordinate -= 1
+        if keys_pressed[pygame.K_DOWN]:
+            self.y_coordinate += 1
+        if keys_pressed[pygame.K_LEFT]:
+            self.x_coordinate -= 1
+        if keys_pressed[pygame.K_RIGHT]:
+            self.x_coordinate += 1
+            
+        # Adjust character's position to stay within screen boundaries
+        if self.x_coordinate < 0:
+            self.x_coordinate = 0
+        if self.x_coordinate > SCREEN_WIDTH - self.width:
+            self.x_coordinate = SCREEN_WIDTH - self.width
+        if self.y_coordinate < 0:
+            self.y_coordinate = 0
+        if self.y_coordinate > SCREEN_HEIGHT - self.height:
+            self.y_coordinate = SCREEN_HEIGHT - self.height
+    
+    # Draw the character on the screen 
+    def draw(self, surface):
+        pass
     
     # The puzzle of the game, returns true if the character has 3 legendary
     # items       
@@ -77,9 +96,17 @@ class Character:
     def getScore(self) -> int:
         return self.score
     
-    # TODO change return value to int array
-    def getPosition(self):
-        return self.position
+    def getX_Coordinate(self) -> int:
+        return self.x_coordinate
+    
+    def getY_Coordinate(self) -> int:
+        return self.y_coordinate
+    
+    def getWidth(self) -> int:
+        return self.width
+    
+    def getHeight(self) -> int:
+        return self.height
     
     # Setter methods
     def setName(self, name):
@@ -94,8 +121,17 @@ class Character:
     def setScore(self, score):
         self.score = score
     
-    def setPosition(self, position):
-        self.position = position
+    def setX_Coordinate(self, x_coordinate):
+        self.x_coordinate = x_coordinate
+        
+    def setY_Coordinate(self, y_coordinate):
+        self.y_coordinate = y_coordinate
+        
+    def setWidth(self, width):
+        self.width = width
+    
+    def setHeight(self, height):
+        self.height = height
 
 
     

@@ -3,10 +3,12 @@
 # that comes in different sizes and damages the player
 
 class Trap:
-    def __init__(self, size, damage) -> None:
-        self.size = size
+    def __init__(self, damage, width, height, x_coordinate=None, y_coordinate=None):
         self.damage = damage
-        self.position = [0, 0]
+        self.width = width
+        self.height = height
+        self.x_coordinate = x_coordinate
+        self.y_coordinate = y_coordinate
 
     # Getter methods
     def getSize(self):
@@ -15,8 +17,17 @@ class Trap:
     def getDamage(self) -> int:
         return self.damage
     
-    def getPosition(self):
-        return self.position
+    def getX_Coordinate(self) -> int:
+        return self.x_coordinate
+    
+    def getY_Coordinate(self) -> int:
+        return self.y_coordinate
+    
+    def getWidth(self) -> int:
+        return self.width
+    
+    def getHeight(self) -> int:
+        return self.height
     
      # Setter methods
     def setSize(self, size):
@@ -25,5 +36,14 @@ class Trap:
     def setDamage(self, damage):
         self.damage = damage
         
-    def setPosition(self, position):
-        self.position = position
+    def setX_Coordinate(self, x_coordinate):
+        self.x_coordinate = x_coordinate
+        
+    def setY_Coordinate(self, y_coordinate):
+        self.y_coordinate = y_coordinate
+        
+    def setWidth(self, width):
+        self.width = width
+    
+    def setHeight(self, height):
+        self.height = height
