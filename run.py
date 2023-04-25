@@ -242,7 +242,7 @@ if __name__ == "__main__":
     # Finished the Labyrinth and scores will be displayed
     print("")
     print("**************************************************")
-    print("Congrats! you have made it throught the labyrinth.")
+    print("Congrats! you have made it through the labyrinth.")
     print("**************************************************")
     print("")
     print("Your final score was: ", character.getScore())
